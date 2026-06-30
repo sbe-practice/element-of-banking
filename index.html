@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elements of Banking · Practice Exam</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f2f6fd;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .exam-wrapper {
+      max-width: 1100px;
+      width: 100%;
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -10px rgba(0,20,50,0.2);
+      padding: 30px 35px;
+      transition: 0.2s;
+    }
+    /* ----- LANDING (module selection) ----- */
+    #landingArea {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .landing-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+    .landing-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0a1e3c;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .landing-header .status-badge {
+      font-size: 0.8rem;
+      background: #d4e0f5;
+      padding: 5px 18px;
+      border-radius: 40px;
+      font-weight: 500;
+    }
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 16px;
+      margin: 12px 0 18px 0;
+    }
+    .module-card {
+      background: #f8faff;
+      border-radius: 18px;
+      padding: 14px 16px 16px 16px;
+      border: 1px solid #dce5f0;
+      transition: 0.1s;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .module-card input[type="checkbox"] {
+      accent-color: #1a3f75;
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+    .module-card .mod-info {
+      flex: 1;
+    }
+    .module-card .mod-info h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #1a3f75;
+    }
+    .module-card .mod-info .desc {
+      font-size: 0.75rem;
+      color: #3a5a7e;
+      opacity: 0.8;
+    }
+    .module-card .count-badge {
+      background: #dce5f0;
+      padding: 0 12px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #1f3a6b;
+      display: inline-block;
+      margin-top: 4px;
+    }
+    .landing-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin: 8px 0 6px 0;
+      padding: 14px 0 6px 0;
+      border-top: 1px solid #dee7f2;
+    }
+    .timer-set {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .timer-set label {
+      font-weight: 500;
+      color: #1f3a6b;
+      font-size: 0.9rem;
+    }
+    .timer-set input[type="number"] {
+      width: 70px;
+      padding: 6px 8px;
+      border: 1px solid #c0cee2;
+      border-radius: 40px;
+      font-weight: 600;
+      text-align: center;
+      background: white;
+    }
+    .timer-set input:focus {
+      outline: 2px solid #2a5c9a;
+      border-color: transparent;
+    }
+    .qty-set {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qty-set label {
+      font-weight: 500;
+      color: #1f3a6b;
+      font-size: 0.9rem;
+    }
+    .qty-set input {
+      width: 65px;
+      padding: 6px 8px;
+      border: 1px solid #c0cee2;
+      border-radius: 40px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .btn {
+      border: none;
+      background: #eef2f9;
+      padding: 9px 24px;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #1f3a6b;
+      cursor: pointer;
+      transition: 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: #1a3f75;
+      color: white;
+      box-shadow: 0 4px 10px rgba(20,60,130,0.2);
+    }
+    .btn-primary:hover { background: #0f2d55; transform: scale(1.02); }
+    .btn-primary:disabled { opacity: 0.5; pointer-events: none; transform: none; }
+    .btn-outline { background: transparent; border: 1.5px solid #b8cae0; }
+    .btn-outline:hover { background: #e4ebf6; }
+    .btn-danger { background: #b13e3e; color: white; }
+    .btn-danger:hover { background: #8f2c2c; }
+    .btn-success { background: #1d7a4a; color: white; }
+    .btn-success:hover { background: #14633b; }
+    .select-all-btn {
+      margin-left: 4px;
+      padding: 4px 16px;
+      font-size: 0.8rem;
+      background: #e6edf8;
+      border: 1px solid #b8cae0;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .select-all-btn:hover { background: #d4e0f5; }
+    .clear-btn {
+      margin-top: 8px;
+      padding: 4px 16px;
+      font-size: 0.75rem;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 30px;
+      cursor: pointer;
+      color: #555;
+      font-weight: 500;
+      transition: 0.15s;
+    }
+    .clear-btn:hover { background: #e0e0e0; border-color: #aaa; }
+
+    /* ----- EXAM MODE (clean: timer + progress + questions) ----- */
+    #examArea {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .exam-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #dee7f2;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+    .exam-top .timer-display {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #0b2a4a;
+      background: #eaf0fa;
+      padding: 0 26px;
+      border-radius: 60px;
+      letter-spacing: 1px;
+      min-width: 120px;
+      text-align: center;
+    }
+    .exam-top .exam-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .exam-top .status-badge {
+      font-size: 0.8rem;
+      background: #d4e0f5;
+      padding: 5px 18px;
+      border-radius: 40px;
+      font-weight: 500;
+    }
+    /* Progress bar */
+    .progress-wrapper {
+      width: 100%;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .progress-bar-bg {
+      flex: 1;
+      height: 10px;
+      background: #e9edf4;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #1a3f75;
+      border-radius: 20px;
+      transition: width 0.25s ease;
+    }
+    .progress-text {
+      font-weight: 600;
+      color: #1a3f75;
+      font-size: 0.9rem;
+      min-width: 70px;
+      text-align: right;
+    }
+    .question-grid {
+      margin: 6px 0 10px 0;
+    }
+    .question-item {
+      background: #fafcff;
+      border: 1px solid #e2e9f5;
+      border-radius: 20px;
+      padding: 18px 22px;
+      margin-bottom: 14px;
+      transition: 0.1s;
+    }
+    .question-item.correct-highlight { border-left: 7px solid #1d8b4f; background: #f2faf5; }
+    .question-item.wrong-highlight { border-left: 7px solid #b13e3e; background: #fdf2f2; }
+    .question-text {
+      font-weight: 500;
+      font-size: 1.05rem;
+      color: #0a1e3c;
+      margin-bottom: 12px;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-left: 6px;
+    }
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.98rem;
+      background: white;
+      padding: 6px 16px 6px 12px;
+      border-radius: 40px;
+      border: 1px solid #dbe2ed;
+      transition: 0.1s;
+      cursor: pointer;
+    }
+    .options label:hover { background: #eef4fe; border-color: #97b3db; }
+    .options input[type="radio"] { accent-color: #1a3f75; width: 18px; height: 18px; }
+    .disabled-options label { cursor: default; opacity: 0.8; }
+    .disabled-options label:hover { background: white; border-color: #dbe2ed; }
+    .feedback-block {
+      margin-top: 12px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: #f0f4fb;
+      font-size: 0.95rem;
+      display: none;
+    }
+    .feedback-block.show { display: block; }
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      border-top: 1px solid #dee7f2;
+      padding-top: 16px;
+    }
+    .score-area {
+      font-size: 1.2rem;
+      font-weight: 600;
+      background: #e9eff9;
+      padding: 5px 24px;
+      border-radius: 40px;
+    }
+
+    /* ----- REVIEW PAGE ----- */
+    #reviewArea {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #1a3f75;
+      margin-bottom: 8px;
+    }
+    .review-header h2 {
+      font-size: 1.8rem;
+      color: #0a1e3c;
+    }
+    .review-stats {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      background: #f0f4fe;
+      padding: 16px 28px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+      justify-content: center;
+    }
+    .review-stat-item {
+      text-align: center;
+    }
+    .review-stat-item .number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #1a3f75;
+    }
+    .review-stat-item .label {
+      font-size: 0.85rem;
+      color: #3a5a7e;
+      font-weight: 500;
+    }
+    .review-stat-item .number.green { color: #1d8b4f; }
+    .review-stat-item .number.red { color: #b13e3e; }
+    .review-stat-item .number.orange { color: #d48c1a; }
+    .review-questions {
+      margin: 10px 0;
+    }
+    .review-question-item {
+      background: #fafcff;
+      border: 1px solid #e2e9f5;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+    }
+    .review-question-item .q-text {
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .review-question-item .q-answer {
+      font-size: 0.95rem;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+    .review-question-item .q-answer.correct { background: #d4edda; color: #155724; }
+    .review-question-item .q-answer.wrong { background: #f8d7da; color: #721c24; }
+    .review-question-item .q-answer.unanswered { background: #fff3cd; color: #856404; }
+    .review-question-item .q-correct-answer {
+      font-size: 0.9rem;
+      color: #1d7a4a;
+      margin-top: 4px;
+    }
+    .review-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .exam-wrapper { padding: 18px; }
+      .module-grid { grid-template-columns: 1fr 1fr; }
+      .exam-top { flex-direction: column; align-items: stretch; gap: 12px; }
+      .exam-top .exam-actions { justify-content: center; }
+      .review-stats { flex-direction: column; gap: 12px; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+<div class="exam-wrapper">
+  <!-- LANDING AREA -->
+  <div id="landingArea">
+    <div class="landing-header">
+      <h1>📘 Elements of Banking · Practice Exam</h1>
+      <span class="status-badge">🔒 Strict mode</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <span style="font-weight:500; color:#1a3f75;">Select modules:</span>
+      <button class="select-all-btn" id="selectAllBtn">✅ Select All</button>
+      <button class="select-all-btn" id="deselectAllBtn">⬜ Deselect All</button>
+    </div>
+    <div class="module-grid" id="moduleGrid">
+      <!-- cards injected by JS -->
+    </div>
+    <div class="landing-controls">
+      <div class="timer-set">
+        <label for="timeInput">⏱️ Minutes</label>
+        <input type="number" id="timeInput" min="1" max="120" value="30">
+        <button class="btn btn-outline" id="setTimerBtn">Set</button>
+        <span style="font-weight:600; margin-left:6px; color:#1a3f75;" id="timerPreview">30:00</span>
+      </div>
+      <div class="qty-set">
+        <label for="numQuestions">📝 #Questions</label>
+        <input type="number" id="numQuestions" min="5" max="200" value="30">
+      </div>
+      <button class="btn btn-primary" id="startExamBtn">▶ Start Exam</button>
+    </div>
+  </div>
+
+  <!-- EXAM AREA (hidden initially) -->
+  <div id="examArea">
+    <div class="exam-top">
+      <div class="timer-display" id="timerDisplay">30:00</div>
+      <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+        <span class="status-badge" id="examStatus">⏳ In progress</span>
+        <button class="btn btn-primary" id="submitExamBtn">📤 Submit</button>
+        <button class="btn btn-outline" id="resetFromExamBtn">↺ Reset</button>
+      </div>
+    </div>
+    <!-- Progress bar -->
+    <div class="progress-wrapper">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+      <span class="progress-text" id="progressText">0%</span>
+    </div>
+    <div id="questionContainer" class="question-grid"></div>
+    <div class="footer-bar">
+      <div class="score-area" id="scoreDisplay">📊 0 / 0</div>
+    </div>
+  </div>
+
+  <!-- REVIEW AREA (shown after submission) -->
+  <div id="reviewArea">
+    <div class="review-header">
+      <h2>📊 Exam Review</h2>
+      <button class="btn btn-outline" id="reviewResetBtn">↺ Back to Setup</button>
+    </div>
+    <div class="review-stats" id="reviewStats">
+      <!-- populated by JS -->
+    </div>
+    <div id="reviewQuestions" class="review-questions">
+      <!-- populated by JS -->
+    </div>
+  </div>
+</div>
+<script>
+  (function() {
+    // ---------- 150+ QUESTIONS from EOB Manual (scenario, case study, critical thinking) ----------
+    const moduleNames = {
+      1: 'Overview of Banking',
+      2: 'Key Functions of Banks',
+      3: 'Banking Products & Classification',
+      4: 'Income Sources & Financial Structure',
+      5: 'Bank Regulatory Structure & Appraisal'
+    };
+
+    const QUESTION_BANK = [
+      // ─── MODULE 1: OVERVIEW OF BANKING (30+ questions) ───
+      { q: "Ade, a tech entrepreneur, wants to start a bank in Nigeria. He has ₦25B in capital. Under the 2024 recapitalisation rules, what type of bank can he license?", opts: ["International Commercial Bank", "National Commercial Bank", "Regional Commercial Bank", "Payment Service Bank"], ans: 3, module: 1, exp: "Payment Service Banks require only ₦5B minimum capital. Regional Commercial Banks require ₦50B, National ₦200B, International ₦500B." },
+      { q: "A customer deposits ₦1M in a bank with CRR=45% and LR=30%. How much of this deposit is immediately available for the bank to lend?", opts: ["₦250,000", "₦300,000", "₦450,000", "₦550,000"], ans: 0, module: 1, exp: "CRR=45% (₦450k) + LR=30% (₦300k) = ₦750k reserved. Available = ₦1M - ₦750k = ₦250k." },
+      { q: "A commercial bank in Nigeria fails. Which institution is most likely to compensate depositors up to the insured limit?", opts: ["CBN", "NDIC", "SEC", "Ministry of Finance"], ans: 1, module: 1, exp: "The Nigeria Deposit Insurance Corporation (NDIC) insures deposits up to ₦5M per depositor per bank and compensates depositors in case of bank failure." },
+      { q: "A fintech company wants to offer banking services without a traditional banking license. What type of institution could it become?", opts: ["Commercial Bank", "Merchant Bank", "Payment Service Bank", "Development Bank"], ans: 2, module: 1, exp: "Payment Service Banks (PSBs) are designed for fintechs and non-banks to offer basic banking services like deposits, transfers, and payments without full commercial banking licenses." },
+      { q: "A community-based association has been operating informal savings. The CBN directs that such accounts must have what document by July 2022?", opts: ["BVN", "CAC Certificate", "NIN", "TIN"], ans: 1, module: 1, exp: "CBN directed that all Community Based Association bank accounts without a CAC Certificate be closed by July 12, 2022." },
+      { q: "A bank wants to underwrite a corporate bond issue. What type of bank is best suited for this?", opts: ["Commercial Bank", "Merchant Bank", "Microfinance Bank", "Payment Service Bank"], ans: 1, module: 1, exp: "Merchant Banks specialize in underwriting, capital market activities, and corporate finance — commercial banks cannot underwrite." },
+      { q: "A customer opens a domiciliary account. From the bank's perspective, this is classified as:", opts: ["Asset", "Liability", "Off-balance-sheet", "Equity"], ans: 1, module: 1, exp: "Domiciliary accounts are Liability Products — the bank owes the foreign currency to the customer." },
+      { q: "A bank has shareholders' funds of ₦80B. What is the maximum single obligor exposure it can have?", opts: ["₦8B", "₦16B", "₦20B", "₦40B"], ans: 1, module: 1, exp: "SOL = 20% of SFUL = 20% × ₦80B = ₦16B." },
+      { q: "A customer wants to send money to the US. Which banking service would most efficiently handle this?", opts: ["Standing Order", "International Money Transfer (Western Union/MoneyGram)", "Direct Debit", "Cheque Clearing"], ans: 1, module: 1, exp: "International Money Transfer services like Western Union handle cross-border remittances efficiently." },
+      { q: "A company needs a loan to build a new factory. Which bank type is specifically designed for such funding?", opts: ["Commercial Bank", "Merchant Bank", "Development Bank", "Microfinance Bank"], ans: 2, module: 1, exp: "Development Banks are dedicated to funding new and upcoming businesses and economic development projects." },
+      { q: "A customer wants to purchase shares in a company's IPO. Which institution would facilitate this?", opts: ["Commercial Bank", "Merchant/Investment Bank", "Microfinance Bank", "Payment Service Bank"], ans: 1, module: 1, exp: "Investment Banks act as intermediaries between security issuers and the investing public, facilitating IPOs and mergers." },
+      { q: "A bank has been asked to provide a performance bond for a construction project. This is classified as:", opts: ["Asset", "Liability", "Off-balance-sheet", "Equity"], ans: 2, module: 1, exp: "Performance Bonds are Off-Balance-Sheet products — contingent obligations that do not create an immediate funded liability unless called." },
+      { q: "A customer wants to deposit ₦500M for 90 days. Which product would the bank likely offer?", opts: ["Current Account", "Savings Account", "Fixed Deposit/Term Deposit", "Domiciliary Account"], ans: 2, module: 1, exp: "Term Deposits (Fixed Deposits) are designed for fixed periods — 90 days would be a short-term term deposit." },
+      { q: "A bank wants to expand its agent network to reach unbanked populations. Which CBN initiative supports this?", opts: ["OMO", "SANNEF", "CRR", "MPR"], ans: 1, module: 1, exp: "SANNEF (Shared Agent Network Expansion Facilities) was designed to roll out agent networks for financial inclusion." },
+      { q: "A customer has a current account and wants to pay a recurring monthly bill automatically. What service should they set up?", opts: ["Standing Order", "Direct Debit", "Bills for Collection", "Letter of Credit"], ans: 0, module: 1, exp: "Standing Orders (Standing Instructions) allow customers to automate recurring payments to third parties." },
+      { q: "A bank is holding significant excess reserves. The CBN wants to tighten liquidity. What tool would they use?", opts: ["Reduce MPR", "Reduce CRR", "Increase CRR", "Buy T-Bills"], ans: 2, module: 1, exp: "Increasing CRR (Cash Reserve Ratio) forces banks to hold more reserves at CBN, reducing their lending capacity and tightening liquidity." },
+      { q: "A customer is considering a Non-Interest Bank vs a Commercial Bank. What is the key difference?", opts: ["Non-Interest Banks don't charge fees", "Non-Interest Banks lend without requiring interest", "Non-Interest Banks only serve Muslims", "Non-Interest Banks don't accept deposits"], ans: 1, module: 1, exp: "Non-Interest Banks operate on Islamic/ethical finance principles — they lend without requiring payment of interest on facilities." },
+      { q: "A bank wants to offer mobile banking services. What key feature would enable customers to pay via QR code?", opts: ["Internet Banking", "USSD Banking", "Mobile App with QR Payments", "ATM Card"], ans: 2, module: 1, exp: "Mobile banking apps with QR code functionality allow customers to scan and pay instantly." },
+      { q: "A customer's cheque is returned unpaid due to insufficient funds. This cheque is considered:", opts: ["Honoured", "Dishonoured", "Cleared", "Accepted"], ans: 1, module: 1, exp: "A cheque returned unpaid due to insufficient funds is 'dishonoured' — the bank refuses payment." },
+      { q: "A bank wants to participate in the interbank foreign exchange market. Which department typically manages this?", opts: ["Retail Banking", "Corporate Banking", "Treasury", "Operations"], ans: 2, module: 1, exp: "The Treasury department manages foreign exchange, interbank placements, and investment portfolios." },
+      { q: "A customer is opening a bank account for their small business. What is the minimum document required?", opts: ["BVN", "CAC Certificate", "NIN", "Valid ID and BVN"], ans: 3, module: 1, exp: "All bank account openings require valid identification (passport, driver's license, national ID) and BVN for KYC compliance." },
+      { q: "A bank's ATM network is down. Which alternative channel could customers use for basic transactions?", opts: ["USSD Banking", "Mobile App", "Internet Banking", "All of the above"], ans: 3, module: 1, exp: "USSD, Mobile App, and Internet Banking are all alternative channels for basic banking transactions when ATMs are unavailable." },
+      { q: "A bank has been classified as 'too important to fail' by the CBN. What designation does this bank receive?", opts: ["International Bank", "DSIB", "Regional Bank", "Systemically Important Financial Institution"], ans: 1, module: 1, exp: "DSIB (Domestic Systemically Important Bank) — a bank whose failure could cause significant disruption to the financial system." },
+      { q: "A customer wants to transfer money to another bank. Which system would handle this?", opts: ["NEFT", "NIBSS", "Both NEFT and NIBSS", "SWIFT"], ans: 2, module: 1, exp: "NEFT (National Electronic Funds Transfer) and NIBSS (Nigeria Inter-Bank Settlement System) both handle interbank transfers within Nigeria." },
+      { q: "A bank is assessing a loan application. What is the primary risk they are evaluating?", opts: ["Liquidity risk", "Credit risk", "Market risk", "Operational risk"], ans: 1, module: 1, exp: "Credit risk is the risk that the borrower will default on the loan — the primary risk in lending." },
+      { q: "A customer wants to deposit foreign currency. Which account type is most appropriate?", opts: ["Current Account", "Savings Account", "Domiciliary Account", "Fixed Deposit"], ans: 2, module: 1, exp: "Domiciliary accounts are specifically for holding foreign currency (USD, GBP, EUR) in Nigeria." },
+      { q: "A bank wants to reduce its exposure to a single borrower. What regulatory limit applies?", opts: ["CRR", "LR", "SOL", "CAR"], ans: 2, module: 1, exp: "SOL (Single Obligor Limit) limits the bank's total credit exposure to any single borrower or group to 20% of Shareholders' Funds Unimpaired by Losses." },
+      { q: "A customer has a complaint about a bank's service. Which institution can they escalate to?", opts: ["CBN", "NDIC", "Both CBN and NDIC", "SEC"], ans: 2, module: 1, exp: "Customers can escalate complaints to the CBN's Consumer Protection Department or NDIC for deposit insurance-related issues." },
+      { q: "A bank is considering launching a new digital product. What is the first step in the product development process?", opts: ["Market research", "Regulatory approval", "Technology development", "Pilot testing"], ans: 0, module: 1, exp: "Market research identifies customer needs and demand before investing in product development." },
+      { q: "A customer wants to save for their child's education. Which banking product would be most appropriate?", opts: ["Current Account", "Savings Account with interest", "Fixed Deposit", "Investment Account"], ans: 1, module: 1, exp: "A savings account with interest accumulation is suitable for medium-term savings goals." },
+
+      // ─── MODULE 2: KEY FUNCTIONS OF BANKS (30+ questions) ───
+      { q: "A bank is evaluating a loan application from a small business. What is the primary function of financial intermediation?", opts: ["Accepting deposits and using them to make loans", "Printing currency", "Regulating interest rates", "Issuing insurance"], ans: 0, module: 2, exp: "Financial intermediation is the process of accepting deposits and using those funds to make loans — bridging surplus and deficit economic units." },
+      { q: "A bank provides a loan directly to a customer to purchase a car. This is an example of:", opts: ["Direct Lending", "Underwriting", "Guarantee", "Bills for Collection"], ans: 0, module: 2, exp: "Direct Lending is when the bank channels funds via direct loans — a Primary Obligation with high credit risk." },
+      { q: "A customer wants to import goods from China. The bank issues a document promising to pay the exporter upon presentation of shipping documents. This is:", opts: ["Letter of Credit", "Bills for Collection", "Banker's Acceptance", "Performance Bond"], ans: 0, module: 2, exp: "A Letter of Credit is a bank's promise to pay the exporter upon presentation of shipping documents — providing security to the seller." },
+      { q: "A customer instructs their bank to automatically pay their rent every month. This is:", opts: ["Standing Order", "Direct Debit", "Bills for Collection", "Cheque"], ans: 0, module: 2, exp: "Standing Orders (Standing Instructions) automate recurring payments to third parties." },
+      { q: "A bank acts as an intermediary for collecting payment from a buyer on behalf of a seller, without guaranteeing payment. This is:", opts: ["Letter of Credit", "Bills for Collection", "Banker's Acceptance", "Direct Lending"], ans: 1, module: 2, exp: "Under Bills for Collection, the bank acts purely as a collection intermediary — it does NOT guarantee payment." },
+      { q: "A bank agrees to underwrite a customer's bond issue. What type of obligation does this create?", opts: ["Primary Obligation, high risk", "Secondary Obligation, medium risk", "Primary, zero risk", "Off-balance-sheet, no risk"], ans: 1, module: 2, exp: "Underwriting carries a Secondary Obligation (bank steps in only if needed) and medium risk." },
+      { q: "A bank provides a performance guarantee for a construction company. This is classified as:", opts: ["Direct Lending", "Underwriting", "Guarantee", "Bills for Collection"], ans: 2, module: 2, exp: "Performance Bonds are Guarantees — Secondary Obligation but high credit risk." },
+      { q: "A bank issues a Banker's Acceptance to facilitate trade finance. What is a Banker's Acceptance?", opts: ["Long-term bond", "Bill drawn on and accepted by a bank, guaranteeing payment in trade finance", "Government security", "Savings product"], ans: 1, module: 2, exp: "A Banker's Acceptance is a short-term bill drawn on and accepted by a bank, guaranteeing payment in trade finance." },
+      { q: "A customer uses their bank's mobile app to transfer money to a friend. This is an example of:", opts: ["Financial Intermediation", "Transactional Banking", "Investment Banking", "Trade Finance"], ans: 1, module: 2, exp: "Mobile money transfer is a transactional banking service — facilitating payments and transfers." },
+      { q: "A bank helps a company merge with another company. This service is provided by which department?", opts: ["Retail Banking", "Corporate Finance", "Treasury", "Operations"], ans: 1, module: 2, exp: "Corporate Finance provides advisory services for mergers, acquisitions, and capital market activities." },
+      { q: "A bank is considering lending to a customer who has a high credit score and stable income. What is the bank's primary risk?", opts: ["Credit risk", "Liquidity risk", "Market risk", "Operational risk"], ans: 0, module: 2, exp: "Credit risk is the risk of default — even with a high credit score, there is always some default risk." },
+      { q: "A bank's ATM dispenses cash to a customer. What is this an example of?", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 1, module: 2, exp: "ATM cash withdrawal is a transactional service — facilitating customer access to their funds." },
+      { q: "A bank offers a savings account with interest. This is an example of:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 0, module: 2, exp: "Savings accounts are part of financial intermediation — the bank uses deposited funds to lend, paying interest to depositors." },
+      { q: "A bank provides a loan to a customer to buy a house. This is an example of:", opts: ["Direct Lending", "Underwriting", "Guarantee", "Bills for Collection"], ans: 0, module: 2, exp: "Mortgage loans are direct lending — the bank provides funds directly to the borrower." },
+      { q: "A customer uses a credit card to make a purchase. What banking function is this?", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 1, module: 2, exp: "Credit card transactions are part of transactional banking — facilitating payments." },
+      { q: "A bank helps a customer invest in government bonds. This is an example of:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 2, module: 2, exp: "Investment services help customers invest in securities like government bonds." },
+      { q: "A customer wants to pay their electricity bill through their bank. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 1, module: 2, exp: "Bill payments are transactional services — facilitating payments to third parties." },
+      { q: "A bank lends money to another bank in the interbank market. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Interbank Lending"], ans: 3, module: 2, exp: "Interbank lending is a specialized function — banks lending to each other to manage liquidity." },
+      { q: "A bank provides a letter of credit to facilitate import. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 3, module: 2, exp: "Letters of Credit are trade finance instruments — facilitating international trade." },
+      { q: "A bank's treasury department manages the bank's investment portfolio. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 2, module: 2, exp: "Treasury management involves investing the bank's own funds in securities and managing liquidity." },
+      { q: "A customer opens a current account and receives a cheque book. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 1, module: 2, exp: "Current accounts with cheque books are transactional banking services." },
+      { q: "A bank provides a loan to a small business for working capital. This is:", opts: ["Direct Lending", "Underwriting", "Guarantee", "Bills for Collection"], ans: 0, module: 2, exp: "Working capital loans are direct lending — the bank provides funds directly to the business." },
+      { q: "A customer deposits money in a fixed deposit account. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 0, module: 2, exp: "Fixed deposits are part of financial intermediation — the bank uses these funds for lending." },
+      { q: "A bank provides a Banker's Acceptance for a customer's trade transaction. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 3, module: 2, exp: "Banker's Acceptances are trade finance instruments." },
+      { q: "A customer uses online banking to transfer funds. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 1, module: 2, exp: "Online fund transfers are transactional banking services." },
+      { q: "A bank provides advice on a company's capital structure. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Corporate Finance"], ans: 3, module: 2, exp: "Corporate Finance provides advisory services on capital structure, M&A, and restructuring." },
+      { q: "A customer deposits cash into their savings account. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 0, module: 2, exp: "Deposits are the foundation of financial intermediation." },
+      { q: "A bank provides a guarantee for a customer's loan from another bank. This is:", opts: ["Direct Lending", "Underwriting", "Guarantee", "Bills for Collection"], ans: 2, module: 2, exp: "Guarantees are secondary obligations where the bank assures repayment if the customer defaults." },
+      { q: "A customer uses a debit card to make a purchase. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Trade Finance"], ans: 1, module: 2, exp: "Debit card transactions are transactional services." },
+      { q: "A bank helps a company issue shares to raise capital. This is:", opts: ["Financial Intermediation", "Transactional Service", "Investment Service", "Corporate Finance"], ans: 3, module: 2, exp: "Capital market activities (equity issuance, underwriting) are corporate finance functions." },
+
+      // ─── MODULE 3: BANKING PRODUCTS & CLASSIFICATION (30+ questions) ───
+      { q: "A customer has a current account with a bank. From the bank's perspective, this is:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 1, module: 3, exp: "Current accounts are Liability Products — the bank owes the customer's money." },
+      { q: "A bank issues a Certificate of Deposit. This is classified as:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 1, module: 3, exp: "Certificates of Deposit are Liability Products — the bank has borrowed the money." },
+      { q: "A bank provides a Letter of Credit. This is classified as:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 2, module: 3, exp: "Letters of Credit are Off-Balance-Sheet — contingent obligations." },
+      { q: "A bank grants an overdraft to a customer. This is classified as:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 0, module: 3, exp: "Overdrafts are Asset Products — the bank has a credit exposure to the customer." },
+      { q: "A bank lends money to another bank through an interbank placement. This is:", opts: ["Asset Product, Minimum Risk", "Liability Product", "Off-balance-sheet", "Equity"], ans: 0, module: 3, exp: "Interbank placements are Asset Products with Minimum Risk due to the short-term nature and counterparty." },
+      { q: "A customer purchases a Treasury Bill through their bank. This is:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Investment Product"], ans: 3, module: 3, exp: "Treasury Bills are investment products available to customers through the bank." },
+      { q: "A bank provides a Performance Bond. This is:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 2, module: 3, exp: "Performance Bonds are Off-Balance-Sheet — contingent obligations." },
+      { q: "A customer deposits money in a Fixed Deposit account. This is:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 1, module: 3, exp: "Fixed Deposits are Liability Products — the bank owes the customer." },
+      { q: "A bank provides a loan to a customer. This is:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 0, module: 3, exp: "Loans are Asset Products — the bank has a claim on the customer." },
+      { q: "A customer uses a debit card. The transaction is processed through:", opts: ["NEFT", "NIBSS", "ATM", "POS"], ans: 3, module: 3, exp: "Debit card transactions are processed through POS (Point of Sale) terminals." },
+      { q: "A bank offers a mortgage product. This is classified by tenor as:", opts: ["Short-term", "Long-term", "Call product", "Interbank product"], ans: 1, module: 3, exp: "Mortgages are Long-term products." },
+      { q: "A customer uses a credit card. This is:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 0, module: 3, exp: "Credit card receivables are Asset Products — the bank has a claim on the customer." },
+      { q: "A bank offers a savings account. This is:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 1, module: 3, exp: "Savings accounts are Liability Products." },
+      { q: "A customer uses USSD banking to check their balance. This is:", opts: ["Digital Banking Product", "Transactional Product", "Both A and B", "None"], ans: 2, module: 3, exp: "USSD banking is both a digital and transactional banking product." },
+      { q: "A bank provides a Banker's Acceptance. This is:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 2, module: 3, exp: "Banker's Acceptances are Off-Balance-Sheet until they are accepted — then they become Asset Products." },
+      { q: "A customer opens a domiciliary account. This is:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 1, module: 3, exp: "Domiciliary accounts are Liability Products." },
+      { q: "A bank provides a Standing Order service. This is:", opts: ["Transactional Product", "Investment Product", "Trade Finance Product", "Corporate Finance"], ans: 0, module: 3, exp: "Standing Orders are Transactional Products — facilitating recurring payments." },
+      { q: "A customer purchases a government bond through their bank. This is:", opts: ["Investment Product", "Transactional Product", "Trade Finance Product", "Corporate Finance"], ans: 0, module: 3, exp: "Government bonds are Investment Products." },
+      { q: "A bank provides a Letter of Credit for an import. This is:", opts: ["Transactional Product", "Investment Product", "Trade Finance Product", "Corporate Finance"], ans: 2, module: 3, exp: "Letters of Credit are Trade Finance Products." },
+      { q: "A customer uses internet banking. This is:", opts: ["Digital Banking Product", "Transactional Product", "Both A and B", "None"], ans: 2, module: 3, exp: "Internet banking is both a digital and transactional banking product." },
+      { q: "A bank provides a Performance Guarantee. This is:", opts: ["Transactional Product", "Investment Product", "Trade Finance Product", "Corporate Finance"], ans: 2, module: 3, exp: "Performance Guarantees are Trade Finance Products." },
+      { q: "A customer deposits money in a Call Deposit account. This is:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 1, module: 3, exp: "Call Deposits are Liability Products." },
+      { q: "A bank provides a Commercial Paper issuance service. This is:", opts: ["Transactional Product", "Investment Product", "Trade Finance Product", "Corporate Finance"], ans: 3, module: 3, exp: "Commercial Paper issuance is a Corporate Finance product." },
+      { q: "A customer uses mobile banking to pay a bill. This is:", opts: ["Digital Banking Product", "Transactional Product", "Both A and B", "None"], ans: 2, module: 3, exp: "Mobile banking bill payments are both digital and transactional." },
+      { q: "A bank provides a Bill for Collection service. This is:", opts: ["Transactional Product", "Investment Product", "Trade Finance Product", "Corporate Finance"], ans: 2, module: 3, exp: "Bills for Collection are Trade Finance Products." },
+      { q: "A customer opens an account for their business. This is:", opts: ["Asset Product", "Liability Product", "Off-balance-sheet", "Equity"], ans: 1, module: 3, exp: "Business accounts are Liability Products." },
+      { q: "A bank provides a Mergers & Acquisitions advisory service. This is:", opts: ["Transactional Product", "Investment Product", "Trade Finance Product", "Corporate Finance"], ans: 3, module: 3, exp: "M&A advisory is a Corporate Finance product." },
+      { q: "A customer uses ATM to withdraw cash. This is:", opts: ["Transactional Product", "Investment Product", "Trade Finance Product", "Corporate Finance"], ans: 0, module: 3, exp: "ATM withdrawals are Transactional Products." },
+      { q: "A bank provides a Bond Issuance service. This is:", opts: ["Transactional Product", "Investment Product", "Trade Finance Product", "Corporate Finance"], ans: 3, module: 3, exp: "Bond issuance is a Corporate Finance product." },
+      { q: "A customer uses POS to make a payment. This is:", opts: ["Transactional Product", "Investment Product", "Trade Finance Product", "Corporate Finance"], ans: 0, module: 3, exp: "POS payments are Transactional Products." },
+
+      // ─── MODULE 4: INCOME SOURCES & FINANCIAL STRUCTURE (30+ questions) ───
+      { q: "A bank earns interest on a loan to a customer. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 0, module: 4, exp: "Interest on loans is Interest Income — the primary income source for banks." },
+      { q: "A bank charges an account maintenance fee. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 1, module: 4, exp: "Account maintenance fees are Fee Income." },
+      { q: "A bank pays interest on a customer's savings account. This is:", opts: ["Interest Expense", "Fee Expense", "Investment Expense", "Other Expense"], ans: 0, module: 4, exp: "Interest on deposits is Interest Expense." },
+      { q: "A bank earns income from trading government bonds. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 2, module: 4, exp: "Income from trading securities is Investment Income." },
+      { q: "A bank charges a processing fee on a loan. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 1, module: 4, exp: "Loan processing fees are Fee Income." },
+      { q: "A bank earns interest on interbank placements. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 0, module: 4, exp: "Interest on interbank placements is Interest Income." },
+      { q: "A bank pays a bonus to staff. This is:", opts: ["Interest Expense", "Operating Expense", "Investment Expense", "Other Expense"], ans: 1, module: 4, exp: "Staff bonuses are Operating Expenses." },
+      { q: "A bank charges an ATM withdrawal fee. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 1, module: 4, exp: "ATM fees are Fee Income." },
+      { q: "A bank earns commission on a Letter of Credit. This is:", opts: ["Interest Income", "Commission Income", "Investment Income", "Other Income"], ans: 1, module: 4, exp: "LC commissions are Commission Income (a type of Fee Income)." },
+      { q: "A bank pays rent for its branch. This is:", opts: ["Interest Expense", "Operating Expense", "Investment Expense", "Other Expense"], ans: 1, module: 4, exp: "Rent is an Operating Expense." },
+      { q: "A bank earns foreign exchange income from selling currency. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 3, module: 4, exp: "FX income falls under 'Other Income' — not interest or fees." },
+      { q: "A bank pays for utilities. This is:", opts: ["Interest Expense", "Operating Expense", "Investment Expense", "Other Expense"], ans: 1, module: 4, exp: "Utilities are Operating Expenses." },
+      { q: "A bank charges an overdraft fee. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 1, module: 4, exp: "Overdraft fees are Fee Income." },
+      { q: "A bank earns income from a subsidiary. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 3, module: 4, exp: "Income from subsidiaries is 'Other Income'." },
+      { q: "A bank pays for security services. This is:", opts: ["Interest Expense", "Operating Expense", "Investment Expense", "Other Expense"], ans: 1, module: 4, exp: "Security services are Operating Expenses." },
+      { q: "A bank charges a management fee on a loan. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 1, module: 4, exp: "Management fees are Fee Income." },
+      { q: "A bank earns dividend income from shares. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 3, module: 4, exp: "Dividend income is 'Other Income'." },
+      { q: "A bank pays for software licenses. This is:", opts: ["Interest Expense", "Operating Expense", "Investment Expense", "Other Expense"], ans: 1, module: 4, exp: "Software licenses are Operating Expenses." },
+      { q: "A bank charges a cheque book fee. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 1, module: 4, exp: "Cheque book fees are Fee Income." },
+      { q: "A bank earns interest on government bonds. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 0, module: 4, exp: "Interest on government bonds is Interest Income." },
+      { q: "A bank pays for advertising. This is:", opts: ["Interest Expense", "Operating Expense", "Investment Expense", "Other Expense"], ans: 1, module: 4, exp: "Advertising is an Operating Expense." },
+      { q: "A bank charges a card issuance fee. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 1, module: 4, exp: "Card issuance fees are Fee Income." },
+      { q: "A bank earns income from leasing equipment. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 3, module: 4, exp: "Leasing income is 'Other Income'." },
+      { q: "A bank pays for insurance. This is:", opts: ["Interest Expense", "Operating Expense", "Investment Expense", "Other Expense"], ans: 1, module: 4, exp: "Insurance is an Operating Expense." },
+      { q: "A bank charges a SMS alert fee. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 1, module: 4, exp: "SMS alert fees are Fee Income." },
+      { q: "A bank earns interest on a mortgage. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 0, module: 4, exp: "Mortgage interest is Interest Income." },
+      { q: "A bank pays for training. This is:", opts: ["Interest Expense", "Operating Expense", "Investment Expense", "Other Expense"], ans: 1, module: 4, exp: "Training is an Operating Expense." },
+      { q: "A bank charges a stamp duty fee. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 1, module: 4, exp: "Stamp duty fees are Fee Income." },
+      { q: "A bank earns income from property rental. This is:", opts: ["Interest Income", "Fee Income", "Investment Income", "Other Income"], ans: 3, module: 4, exp: "Rental income is 'Other Income'." },
+      { q: "A bank pays for repairs and maintenance. This is:", opts: ["Interest Expense", "Operating Expense", "Investment Expense", "Other Expense"], ans: 1, module: 4, exp: "Repairs and maintenance are Operating Expenses." },
+
+      // ─── MODULE 5: BANK REGULATORY STRUCTURE & APPRAISAL (30+ questions) ───
+      { q: "A bank has Tier 1 capital of ₦100B, Tier 2 of ₦30B, and Risk-Weighted Assets of ₦800B. What is the CAR?", opts: ["12.5%", "16.25%", "10%", "13.75%"], ans: 1, module: 5, exp: "CAR = (100+30)/800 ×100 = 16.25%." },
+      { q: "A bank has a CAR of 14.5%. It is an International Bank. Is it compliant?", opts: ["Yes, above 10%", "No, below 15%", "Yes, above 8%", "No, below 16%"], ans: 1, module: 5, exp: "International Banks require a minimum CAR of 15% — 14.5% is non-compliant." },
+      { q: "A bank has a loan of ₦50M to a customer. The customer defaults after 200 days. How should this loan be classified?", opts: ["Standard", "Substandard", "Doubtful", "Lost"], ans: 2, module: 5, exp: "180-360 days = Doubtful classification." },
+      { q: "A bank has a loan of ₦100M to a customer. The customer defaults after 400 days. What provision is required?", opts: ["₦10M (10%)", "₦50M (50%)", "₦100M (100%)", "₦1M (1% general)"], ans: 2, module: 5, exp: ">360 days = Lost classification, requiring 100% specific provision." },
+      { q: "A bank's total deposits are ₦500B. What is the minimum CRR it must hold?", opts: ["₦50B (10%)", "₦225B (45%)", "₦150B (30%)", "₦80B (16%)"], ans: 1, module: 5, exp: "CRR for commercial banks is 45% of total deposits = ₦225B." },
+      { q: "A bank has a total deposit of ₦500B. What is the minimum Liquid Assets it must hold?", opts: ["₦50B (10%)", "₦150B (30%)", "₦225B (45%)", "₦80B (16%)"], ans: 1, module: 5, exp: "Liquidity Ratio for commercial banks is 30% of total deposits = ₦150B." },
+      { q: "A bank has a loan portfolio of ₦200B. What is the general provision required?", opts: ["₦2B (1%)", "₦20B (10%)", "₦200M (0.1%)", "₦4B (2%)"], ans: 0, module: 5, exp: "General provision of 1% on performing loans = ₦2B." },
+      { q: "A bank has SFUL of ₦100B. What is the maximum exposure to a single borrower?", opts: ["₦10B (10%)", "₦20B (20%)", "₦30B (30%)", "₦50B (50%)"], ans: 1, module: 5, exp: "SOL = 20% of SFUL = ₦20B." },
+      { q: "A bank has an exposure of ₦25B to a single borrower. SFUL is ₦100B. Is the bank compliant?", opts: ["Yes, below 30%", "No, exceeds 20% limit", "Yes, below 25%", "No, exceeds 15% limit"], ans: 1, module: 5, exp: "SOL is 20% of SFUL = ₦20B. Exposure of ₦25B exceeds the limit." },
+      { q: "A bank has a loan to a related party of ₦15B. SFUL is ₦100B. Is this compliant?", opts: ["Yes, below 20%", "No, related party limit is 10%", "Yes, below 15%", "No, related party limit is 5%"], ans: 1, module: 5, exp: "Related party exposure is limited to 10% of SFUL = ₦10B. ₦15B exceeds this." },
+      { q: "A bank has an NPL ratio of 8%. What is the likely regulatory action?", opts: ["No action", "Increased supervision and possible capital injection", "Reduced CRR", "Increased MPR"], ans: 1, module: 5, exp: "High NPL ratios (>5%) trigger increased supervisory attention and potential capital requirements." },
+      { q: "A bank's capital is ₦80B. The CAR is 10%. What is the maximum Risk-Weighted Assets it can have?", opts: ["₦800B", "₦1,000B", "₦600B", "₦400B"], ans: 0, module: 5, exp: "CAR = Capital / RWA ×100. RWA = Capital / CAR ×100 = ₦80B / 10% = ₦800B." },
+      { q: "A bank is found to have a CAR below the minimum. What is the likely consequence?", opts: ["Bonus for management", "Regulatory sanctions and capital injection requirement", "Reduced supervision", "Increased dividends"], ans: 1, module: 5, exp: "Below minimum CAR triggers regulatory sanctions and requires capital injection." },
+      { q: "A bank is suspected of money laundering. What is the required action?", opts: ["Ignore", "File Suspicious Transaction Report to NFIU", "Close the account immediately", "Contact the customer"], ans: 1, module: 5, exp: "Suspicious transactions must be reported to the NFIU (Nigerian Financial Intelligence Unit)." },
+      { q: "A bank wants to open a new branch. What regulatory approval is required?", opts: ["CBN approval", "NDIC approval", "SEC approval", "No approval required"], ans: 0, module: 5, exp: "Branch openings require CBN approval (banking supervision)." },
+      { q: "A bank's customer complains about unauthorized transactions. What is the bank's obligation?", opts: ["Investigate and resolve", "Ignore the complaint", "Refer to external parties", "Close the account"], ans: 0, module: 5, exp: "Banks have a duty to investigate customer complaints and resolve them promptly." },
+      { q: "A bank has a significant exposure to a single industry. What is the regulatory concern?", opts: ["Liquidity risk", "Concentration risk", "Market risk", "Operational risk"], ans: 1, module: 5, exp: "Concentration risk arises when a bank has excessive exposure to a single industry or sector." },
+      { q: "A bank is found to have inadequate internal controls. What CAMELS component is most affected?", opts: ["Capital Adequacy", "Asset Quality", "Management Quality", "Liquidity"], ans: 2, module: 5, exp: "Management Quality evaluates internal controls, policies, and risk management practices." },
+      { q: "A bank's loan portfolio has high NPLs. What CAMELS component is most affected?", opts: ["Capital Adequacy", "Asset Quality", "Management Quality", "Earnings Capacity"], ans: 1, module: 5, exp: "Asset Quality evaluates the level and severity of classified assets and NPLs." },
+      { q: "A bank has low profitability. What CAMELS component is most affected?", opts: ["Capital Adequacy", "Asset Quality", "Management Quality", "Earnings Capacity"], ans: 3, module: 5, exp: "Earnings Capacity evaluates profitability, return on assets, and return on equity." },
+      { q: "A bank has a high exposure to interest rate changes. What CAMELS component is most affected?", opts: ["Capital Adequacy", "Asset Quality", "Liquidity", "Sensitivity to Market Risk"], ans: 3, module: 5, exp: "Sensitivity to Market Risk measures the impact of market volatility on bank capital." },
+      { q: "A bank has a high loan-to-deposit ratio. What risk does this indicate?", opts: ["Liquidity risk", "Credit risk", "Market risk", "Operational risk"], ans: 0, module: 5, exp: "A high loan-to-deposit ratio indicates liquidity risk — the bank may not have enough liquid assets to meet withdrawals." },
+      { q: "A bank has a high percentage of short-term funding. What risk does this indicate?", opts: ["Liquidity risk", "Credit risk", "Market risk", "Operational risk"], ans: 0, module: 5, exp: "Short-term funding (interbank takings, call deposits) is volatile — indicating liquidity risk." },
+      { q: "A bank has a high concentration in a single sector. What risk does this indicate?", opts: ["Liquidity risk", "Concentration risk", "Market risk", "Operational risk"], ans: 1, module: 5, exp: "Concentration risk arises from excessive exposure to a single sector or borrower." },
+      { q: "A bank has a high exposure to foreign currency. What risk does this indicate?", opts: ["Liquidity risk", "Credit risk", "Market risk", "Operational risk"], ans: 2, module: 5, exp: "Foreign currency exposure indicates market risk — exchange rate fluctuations can impact earnings." },
+      { q: "A bank has a high level of non-performing loans. What risk does this indicate?", opts: ["Liquidity risk", "Credit risk", "Market risk", "Operational risk"], ans: 1, module: 5, exp: "NPLs indicate credit risk — the risk of borrower default." },
+      { q: "A bank has a high level of operational losses. What risk does this indicate?", opts: ["Liquidity risk", "Credit risk", "Market risk", "Operational risk"], ans: 3, module: 5, exp: "Operational losses indicate operational risk — from fraud, systems failure, or human error." },
+      { q: "A bank has a high level of related party lending. What regulatory concern does this raise?", opts: ["Liquidity risk", "Concentration risk", "Market risk", "Operational risk"], ans: 1, module: 5, exp: "Related party lending is subject to stricter limits (10% of SFUL) and indicates concentration risk." },
+      { q: "A bank is found to have weak internal controls. What regulatory action is likely?", opts: ["Fines and enforcement actions", "Bonus for management", "Reduced supervision", "Increased dividends"], ans: 0, module: 5, exp: "Weak internal controls can lead to fines, enforcement actions, and increased supervisory scrutiny." },
+      { q: "A bank wants to pay a dividend. What regulatory condition must be met?", opts: ["CAR above minimum", "Profitability", "Both CAR above minimum and profitability", "No regulatory conditions"], ans: 2, module: 5, exp: "Dividend payments require regulatory approval and must be paid from profits after provisions." },
+      { q: "A bank is found to have insufficient liquidity. What regulatory tool can CBN use?", opts: ["Increase MPR", "Decrease MPR", "Provide emergency liquidity assistance", "Increase reserve requirements"], ans: 2, module: 5, exp: "The CBN can provide emergency liquidity assistance (ELA) to solvent but illiquid banks." }
+    ];
+
+    // Deduplicate
+    const seenIds = new Set();
+    const ALL_QS = QUESTION_BANK.filter(q => {
+      const key = q.q.slice(0, 30);
+      if (seenIds.has(key)) return false;
+      seenIds.add(key);
+      return true;
+    });
+
+    // ----- DOM refs -----
+    const landingArea = document.getElementById('landingArea');
+    const examArea = document.getElementById('examArea');
+    const reviewArea = document.getElementById('reviewArea');
+    const moduleGrid = document.getElementById('moduleGrid');
+    const timeInput = document.getElementById('timeInput');
+    const timerPreview = document.getElementById('timerPreview');
+    const numQInput = document.getElementById('numQuestions');
+    const startBtn = document.getElementById('startExamBtn');
+    const submitBtn = document.getElementById('submitExamBtn');
+    const resetFromExamBtn = document.getElementById('resetFromExamBtn');
+    const reviewResetBtn = document.getElementById('reviewResetBtn');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const examStatus = document.getElementById('examStatus');
+    const container = document.getElementById('questionContainer');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const setTimerBtn = document.getElementById('setTimerBtn');
+    const selectAllBtn = document.getElementById('selectAllBtn');
+    const deselectAllBtn = document.getElementById('deselectAllBtn');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const reviewStats = document.getElementById('reviewStats');
+    const reviewQuestions = document.getElementById('reviewQuestions');
+
+    // ----- state -----
+    let filteredQuestions = [];
+    let userAnswers = [];
+    let examActive = false;
+    let examSubmitted = false;
+    let timerInterval = null;
+    let timeSeconds = 1800;
+
+    // build module cards with counts
+    function buildModuleCards() {
+      const counts = {};
+      ALL_QS.forEach(item => { counts[item.module] = (counts[item.module] || 0) + 1; });
+      let html = '';
+      for (let m = 1; m <= 5; m++) {
+        const count = counts[m] || 0;
+        html += `<div class="module-card">
+          <input type="checkbox" class="module-check" value="${m}" checked>
+          <div class="mod-info">
+            <h4>Module ${m}</h4>
+            <div class="desc">${moduleNames[m] || ''}</div>
+            <span class="count-badge">${count} questions</span>
+          </div>
+        </div>`;
+      }
+      moduleGrid.innerHTML = html;
+    }
+    buildModuleCards();
+
+    function getSelectedModules() {
+      const checks = document.querySelectorAll('.module-check:checked');
+      return Array.from(checks).map(cb => parseInt(cb.value));
+    }
+
+    function prepareQuestions() {
+      const mods = getSelectedModules();
+      let pool = ALL_QS.filter(q => mods.includes(q.module));
+      if (pool.length === 0) return [];
+      let desired = parseInt(numQInput.value) || 10;
+      if (desired < 1) desired = 1;
+      if (desired > 200) desired = 200;
+      if (desired > pool.length) desired = pool.length;
+      numQInput.value = desired;
+      const shuffled = [...pool];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled.slice(0, desired);
+    }
+
+    function updateProgress() {
+      const total = filteredQuestions.length;
+      if (total === 0) { progressFill.style.width = '0%'; progressText.textContent = '0%'; return; }
+      const answered = userAnswers.filter(a => a !== undefined && a !== -1).length;
+      const pct = Math.round((answered / total) * 100);
+      progressFill.style.width = pct + '%';
+      progressText.textContent = pct + '%';
+    }
+
+    function clearAnswer(qIdx) {
+      if (examSubmitted || !examActive) return;
+      userAnswers[qIdx] = -1;
+      const container = document.getElementById('questionContainer');
+      const questionDivs = container.querySelectorAll('.question-item');
+      if (questionDivs[qIdx]) {
+        const radios = questionDivs[qIdx].querySelectorAll('input[type="radio"]');
+        radios.forEach(r => r.checked = false);
+      }
+      updateScore();
+      updateProgress();
+    }
+
+    function renderQuestions() {
+      if (!container) return;
+      let html = '';
+      filteredQuestions.forEach((item, idx) => {
+        const selected = (userAnswers[idx] !== undefined) ? userAnswers[idx] : -1;
+        let disabledClass = (examSubmitted || !examActive) ? 'disabled-options' : '';
+        let highlight = '';
+        if (examSubmitted) {
+          if (selected === item.ans) highlight = 'correct-highlight';
+          else if (selected !== -1 && selected !== item.ans) highlight = 'wrong-highlight';
+        }
+        html += `<div class="question-item ${highlight}">`;
+        html += `<div class="question-text">${idx+1}. ${item.q}</div>`;
+        html += `<div class="options ${disabledClass}">`;
+        item.opts.forEach((opt, oi) => {
+          const checked = (selected === oi) ? 'checked' : '';
+          const disabled = (examSubmitted || !examActive) ? 'disabled' : '';
+          html += `<label>
+            <input type="radio" name="q${idx}" value="${oi}" ${checked} ${disabled}>
+            ${opt}
+          </label>`;
+        });
+        html += `</div>`;
+        if (examActive && !examSubmitted) {
+          html += `<button class="clear-btn" data-qidx="${idx}">✕ Clear answer</button>`;
+        }
+        let fb = '';
+        if (examSubmitted) {
+          if (selected !== -1) {
+            const isCorrect = (selected === item.ans);
+            fb = `<div class="feedback-block show">${isCorrect ? '✅ Correct' : '❌ Incorrect. Correct: ' + item.opts[item.ans]}</div>`;
+          } else {
+            fb = `<div class="feedback-block show">⚠️ Not answered. Correct: ${item.opts[item.ans]}</div>`;
+          }
+        }
+        html += fb;
+        html += `</div>`;
+      });
+      container.innerHTML = html;
+      if (examActive && !examSubmitted) {
+        container.querySelectorAll('input[type="radio"]').forEach(radio => {
+          radio.addEventListener('change', function() {
+            const qIdx = parseInt(this.name.replace('q',''));
+            const val = parseInt(this.value);
+            if (!isNaN(qIdx) && !examSubmitted) {
+              userAnswers[qIdx] = val;
+              updateScore();
+              updateProgress();
+            }
+          });
+        });
+        container.querySelectorAll('.clear-btn').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            const qIdx = parseInt(this.dataset.qidx);
+            clearAnswer(qIdx);
+          });
+        });
+      }
+      updateScore();
+      updateProgress();
+    }
+
+    function updateScore() {
+      if (!examSubmitted) {
+        const answered = userAnswers.filter(a => a !== undefined && a !== -1).length;
+        scoreDisplay.textContent = `📊 ${answered} / ${filteredQuestions.length}`;
+      }
+    }
+
+    function startTimer(seconds) {
+      if (timerInterval) clearInterval(timerInterval);
+      timeSeconds = seconds;
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        if (timeSeconds <= 0) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+          autoSubmit();
+          return;
+        }
+        timeSeconds--;
+        updateTimerDisplay();
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timeSeconds / 60);
+      const secs = timeSeconds % 60;
+      const str = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+      timerDisplay.textContent = str;
+      timerPreview.textContent = str;
+    }
+
+    function autoSubmit() {
+      if (examActive && !examSubmitted) {
+        alert('⏰ Time is up! Submitting automatically.');
+        submitExam();
+      }
+    }
+
+    function showReview() {
+      let correct = 0, wrong = 0, unanswered = 0;
+      filteredQuestions.forEach((q, i) => {
+        const ans = userAnswers[i];
+        if (ans === -1) unanswered++;
+        else if (ans === q.ans) correct++;
+        else wrong++;
+      });
+      const total = filteredQuestions.length;
+      const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+      reviewStats.innerHTML = `
+        <div class="review-stat-item">
+          <div class="number">${pct}%</div>
+          <div class="label">Score</div>
+        </div>
+        <div class="review-stat-item">
+          <div class="number green">${correct}</div>
+          <div class="label">Correct</div>
+        </div>
+        <div class="review-stat-item">
+          <div class="number red">${wrong}</div>
+          <div class="label">Wrong</div>
+        </div>
+        <div class="review-stat-item">
+          <div class="number orange">${unanswered}</div>
+          <div class="label">Unanswered</div>
+        </div>
+        <div class="review-stat-item">
+          <div class="number">${total}</div>
+          <div class="label">Total Questions</div>
+        </div>
+      `;
+
+      let html = '';
+      filteredQuestions.forEach((q, i) => {
+        const ans = userAnswers[i];
+        let statusClass = '', statusText = '', correctAnswer = '';
+        if (ans === -1) {
+          statusClass = 'unanswered';
+          statusText = '⚠️ Not answered';
+          correctAnswer = `Correct answer: ${q.opts[q.ans]}`;
+        } else if (ans === q.ans) {
+          statusClass = 'correct';
+          statusText = '✅ Correct';
+        } else {
+          statusClass = 'wrong';
+          statusText = '❌ Wrong';
+          correctAnswer = `Correct answer: ${q.opts[q.ans]}`;
+        }
+        const userAnsText = ans !== -1 ? q.opts[ans] : 'Not answered';
+        html += `
+          <div class="review-question-item">
+            <div class="q-text">${i+1}. ${q.q}</div>
+            <div>
+              <span class="q-answer ${statusClass}">${statusText}</span>
+              <span style="margin-left:12px; font-size:0.9rem; color:#333;">Your answer: ${userAnsText}</span>
+            </div>
+            ${correctAnswer ? `<div class="q-correct-answer">${correctAnswer}</div>` : ''}
+          </div>
+        `;
+      });
+      reviewQuestions.innerHTML = html;
+    }
+
+    function submitExam() {
+      if (examSubmitted) return;
+      if (!examActive) { alert('Exam not started.'); return; }
+      examSubmitted = true;
+      examActive = false;
+      if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+      submitBtn.disabled = true;
+      examStatus.textContent = '✅ Submitted';
+      examArea.style.display = 'none';
+      reviewArea.style.display = 'flex';
+      showReview();
+    }
+
+    function resetToLanding() {
+      if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+      examActive = false;
+      examSubmitted = false;
+      userAnswers = [];
+      filteredQuestions = [];
+      submitBtn.disabled = false;
+      examStatus.textContent = '🔒 Strict mode';
+      landingArea.style.display = 'block';
+      examArea.style.display = 'none';
+      reviewArea.style.display = 'none';
+      const mins = parseInt(timeInput.value) || 30;
+      timeSeconds = mins * 60;
+      updateTimerDisplay();
+      container.innerHTML = '';
+      scoreDisplay.textContent = '📊 0 / 0';
+      progressFill.style.width = '0%';
+      progressText.textContent = '0%';
+      document.querySelectorAll('.module-check').forEach(cb => cb.disabled = false);
+      numQInput.disabled = false;
+      startBtn.disabled = false;
+    }
+
+    function startExam() {
+      if (examActive) return;
+      const mods = getSelectedModules();
+      if (mods.length === 0) { alert('Please select at least one module.'); return; }
+      const qs = prepareQuestions();
+      if (qs.length === 0) { alert('No questions available for selected modules.'); return; }
+      filteredQuestions = qs;
+      userAnswers = new Array(filteredQuestions.length).fill(-1);
+      examSubmitted = false;
+      examActive = true;
+      submitBtn.disabled = false;
+      startBtn.disabled = true;
+      examStatus.textContent = '⏳ In progress';
+      let mins = parseInt(timeInput.value);
+      if (isNaN(mins) || mins < 1) mins = 1;
+      if (mins > 120) mins = 120;
+      timeInput.value = mins;
+      timeSeconds = mins * 60;
+      updateTimerDisplay();
+      if (timerInterval) clearInterval(timerInterval);
+      startTimer(timeSeconds);
+      landingArea.style.display = 'none';
+      examArea.style.display = 'flex';
+      reviewArea.style.display = 'none';
+      document.querySelectorAll('.module-check').forEach(cb => cb.disabled = true);
+      numQInput.disabled = true;
+      renderQuestions();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ---- event listeners ----
+    startBtn.addEventListener('click', startExam);
+    submitBtn.addEventListener('click', function() {
+      if (examActive && !examSubmitted) {
+        if (confirm('Submit your answers? You cannot change after submission.')) {
+          submitExam();
+        }
+      }
+    });
+    resetFromExamBtn.addEventListener('click', function() {
+      if (examActive && !examSubmitted) {
+        if (!confirm('Reset exam? Progress will be lost.')) return;
+      }
+      resetToLanding();
+    });
+    reviewResetBtn.addEventListener('click', resetToLanding);
+    setTimerBtn.addEventListener('click', function() {
+      if (examActive) { alert('Cannot change timer while exam is running.'); return; }
+      let mins = parseInt(timeInput.value);
+      if (isNaN(mins) || mins < 1) mins = 1;
+      if (mins > 120) mins = 120;
+      timeInput.value = mins;
+      timeSeconds = mins * 60;
+      updateTimerDisplay();
+    });
+    selectAllBtn.addEventListener('click', function() {
+      document.querySelectorAll('.module-check').forEach(cb => cb.checked = true);
+    });
+    deselectAllBtn.addEventListener('click', function() {
+      document.querySelectorAll('.module-check').forEach(cb => cb.checked = false);
+    });
+
+    (function init() {
+      const mins = parseInt(timeInput.value) || 30;
+      timeSeconds = mins * 60;
+      updateTimerDisplay();
+      landingArea.style.display = 'block';
+      examArea.style.display = 'none';
+      reviewArea.style.display = 'none';
+    })();
+
+    window.addEventListener('beforeunload', function(e) {
+      if (examActive && !examSubmitted) {
+        e.preventDefault();
+        e.returnValue = 'Exam in progress. Leave?';
+      }
+    });
+  })();
+</script>
+</body>
+</html>
